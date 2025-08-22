@@ -6,6 +6,7 @@ import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js
 import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from "../mailtrap/emails.js";
 
 
+
 export const signup = async (req, res) => {
     // Here you would typically handle user registration logic
     // such as validating input, hashing passwords, and saving the user to the database.
@@ -179,6 +180,20 @@ export const resetPassword = async (req, res) => {
 		res.status(200).json({ success: true, message: "Password reset successful" });
 	} catch (error) {
 		console.log("Error in resetPassword ", error);
+		res.status(400).json({ success: false, message: error.message });
+	}
+};
+
+export const checkAuth = async (req, res) => {
+	try {
+		const user = await User.findById(req.userId).select("-password");
+		if (!user) {
+			return res.status(400).json({ success: false, message: "User not found" });
+		}
+
+		res.status(200).json({ success: true, user });
+	} catch (error) {
+		console.log("Error in checkAuth ", error);
 		res.status(400).json({ success: false, message: error.message });
 	}
 };
