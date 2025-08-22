@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const connetDB = async () => {
+export const connectDB = async () => {
     try {
         const db = await mongoose.connect(process.env.MONGODB_URI)
         console.log(`MongoDB Connected: ${db.connection.host}`);
